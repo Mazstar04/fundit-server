@@ -1,6 +1,7 @@
 using AutoMapper;
 using fundit_server.DTOs;
 using fundit_server.Entities;
+using fundit_server.Enums;
 
 namespace fundit_server.MappingProfiles;
 public class CampaignProfile : Profile
@@ -16,12 +17,12 @@ public class CampaignProfile : Profile
         CreateMap<Campaign, GetCampaignResponse>()
         .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.User.LastName} {src.User.FirstName}"))
         .ForMember(dest => dest.ProfileImagePath, opt => opt.MapFrom(src => src.User.ProfileImagePath))
-        .ForMember(dest => dest.AmountRaised, opt => opt.MapFrom(src => src.Payments.Sum(s=> s.Amount)));
+        .ForMember(dest => dest.AmountRaised, opt => opt.MapFrom(src => src.Payments.Where(p=> p.Status == PaymentStatus.Successful).Sum(s=> s.Amount)));
         
         CreateMap<Campaign, GetCampaignDetailResponse>()
         .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.User.LastName} {src.User.FirstName}"))
         .ForMember(dest => dest.ProfileImagePath, opt => opt.MapFrom(src => src.User.ProfileImagePath))
-        .ForMember(dest => dest.AmountRaised, opt => opt.MapFrom(src => src.Payments.Sum(s=> s.Amount)));
+        .ForMember(dest => dest.AmountRaised, opt => opt.MapFrom(src => src.Payments.Where(p=> p.Status == PaymentStatus.Successful).Sum(s=> s.Amount)));
         // Add other mappings as needed...
     }
 }

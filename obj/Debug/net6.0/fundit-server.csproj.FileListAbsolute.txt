@@ -44,3 +44,4 @@ C:\Users\Administrator\Desktop\Maz's\Projects\fundit-server\bin\Debug\net6.0\Hum
 C:\Users\Administrator\Desktop\Maz's\Projects\fundit-server\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\Administrator\Desktop\Maz's\Projects\fundit-server\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\Administrator\Desktop\Maz's\Projects\fundit-server\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Administrator\Desktop\Maz's\Projects\fundit-server\bin\Debug\net6.0\PayStack.Net.dll

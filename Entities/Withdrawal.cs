@@ -10,6 +10,6 @@ namespace fundit_server.Entities
         public string AccountName { get; set; }
         public User User { get; set; }
         public Guid UserId { get; set; }
-        public WithdrawalStatus Status { get; set; }
+        public PaymentStatus Status { get; set; }
     }
 }

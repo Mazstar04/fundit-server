@@ -1,4 +1,5 @@
 using fundit_server.DTOs;
+using fundit_server.Enums;
 using fundit_server.Interfaces.Services;
 using fundit_server.Wrapper;
 using Microsoft.AspNetCore.Authorization;
@@ -18,39 +19,38 @@ public class PaymentController : BaseApiController
         _paymentService = paymentService;
     }
 
-    [Route("make-payment")]
+    [Route("initialize-payment")]
     [HttpPost]
-    public async Task<IActionResult> MakePayment([FromBody] MakePaymentRequest request)
+    public async Task<IActionResult> InitializePayment([FromBody] InitializePaymentRequest request)
     {
-        var result = await _paymentService.MakePayment(request);
+        var result = await _paymentService.InitializePayment(request);
+        return Respond(result);
+    }
+
+    [Route("verify-payment")]
+    [HttpPost]
+    public async Task<IActionResult> PaymentCallback(string reference)
+    {
+        var result = await _paymentService.PaymentCallback(reference);
         return Respond(result);
     }
 
 
-    [Route("get-incoming-payments")]
+    [Route("get-user-payments")]
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetUserIncomingPayments([FromQuery] PaginationFilter paginationFilter)
+    public async Task<IActionResult> GetUserOutgoingPayments([FromQuery] PaginationFilter paginationFilter,[FromQuery] PaymentStatus? status)
     {
-        var result = await _paymentService.GetUserIncomingPayments(paginationFilter);
-        return Ok(result);
-    }
-
-    [Route("get-outgoing-payments")]
-    [Authorize]
-    [HttpGet]
-    public async Task<IActionResult> GetUserOutgoingPayments([FromQuery] PaginationFilter paginationFilter)
-    {
-        var result = await _paymentService.GetUserOutgoingPayments(paginationFilter);
+        var result = await _paymentService.GetUserPayments(paginationFilter, status);
         return Ok(result);
     }
 
     [Route("get-payments-by-campaignid")]
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetPaymentsByCampaignId([FromQuery] PaginationFilter paginationFilter, [FromQuery]  Guid campaignId)
+    public async Task<IActionResult> GetPaymentsByCampaignId([FromQuery] PaginationFilter paginationFilter,[FromQuery] PaymentStatus? status, [FromQuery] Guid campaignId)
     {
-        var result = await _paymentService.GetPaymentsByCampaignId(paginationFilter, campaignId);
+        var result = await _paymentService.GetPaymentsByCampaignId(paginationFilter,status, campaignId);
         return Ok(result);
     }
 

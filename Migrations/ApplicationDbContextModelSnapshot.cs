@@ -103,8 +103,19 @@ namespace fundit_server.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -243,13 +254,11 @@ namespace fundit_server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("fundit_server.Entities.User", "User")
+                    b.HasOne("fundit_server.Entities.User", null)
                         .WithMany("Payments")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Campaign");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("fundit_server.Entities.Withdrawal", b =>

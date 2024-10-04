@@ -20,7 +20,7 @@ namespace fundit_server.Migrations
                     PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: true),
                     HashSalt = table.Column<string>(type: "text", nullable: true),
-                    ProfileImagePath = table.Column<string>(type: "text", nullable: true),
+                    ProfileImagePath = table.Column<string>(type: "text", nullable: false),
                     WalletBalance = table.Column<decimal>(type: "numeric", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -44,6 +44,7 @@ namespace fundit_server.Migrations
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ImagePaths = table.Column<string[]>(type: "text[]", nullable: false),
+                    CoverImagePath = table.Column<string>(type: "text", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -62,13 +63,14 @@ namespace fundit_server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Withdrawalss",
+                name: "Withdrawals",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     BankName = table.Column<string>(type: "text", nullable: false),
                     AccountNo = table.Column<string>(type: "text", nullable: false),
+                    AccountName = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -79,9 +81,9 @@ namespace fundit_server.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Withdrawalss", x => x.Id);
+                    table.PrimaryKey("PK_Withdrawals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Withdrawalss_Users_UserId",
+                        name: "FK_Withdrawals_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -94,8 +96,11 @@ namespace fundit_server.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Reference = table.Column<string>(type: "text", nullable: false),
                     CampaignId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -115,8 +120,7 @@ namespace fundit_server.Migrations
                         name: "FK_Payments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -141,8 +145,8 @@ namespace fundit_server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Withdrawalss_UserId",
-                table: "Withdrawalss",
+                name: "IX_Withdrawals_UserId",
+                table: "Withdrawals",
                 column: "UserId");
         }
 
@@ -152,7 +156,7 @@ namespace fundit_server.Migrations
                 name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Withdrawalss");
+                name: "Withdrawals");
 
             migrationBuilder.DropTable(
                 name: "Campaigns");

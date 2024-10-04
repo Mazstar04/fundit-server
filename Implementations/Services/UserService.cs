@@ -4,6 +4,7 @@ using System.Net;
 using AutoMapper;
 using fundit_server.DTOs;
 using fundit_server.Entities;
+using fundit_server.Enums;
 using fundit_server.Interfaces.Repositories;
 using fundit_server.Interfaces.Services;
 using fundit_server.Results;
@@ -40,7 +41,7 @@ namespace fundit_server.Implementations.Services
 
         }
 
-        public async Task<bool> DecuctFromWallet(Guid userId, decimal amount)
+        public async Task<bool> DeductFromWallet(Guid userId, decimal amount)
         {
             var user = await _userRepo.GetAsync(userId);
             if (user != null)
@@ -79,11 +80,10 @@ namespace fundit_server.Implementations.Services
             var stats = new GetUserStatsResponse
             {
                 WalletBalance = user.WalletBalance,
-                TotalAmountDonated = user.Payments.Sum(s => s.Amount),
                 TotalAmountWithdrawn = user.Withdrawals.Sum(s => s.Amount),
-                TotalAmountReceived = user.Campaigns.Sum(p => p.Payments.Sum(pay => pay.Amount)),
-                TotalActiveCampaigns = user.Campaigns.Where(s => s.Payments.Sum(p => p.Amount) < s.Amount).Count(),
-                TotalInactiveCampaigns = user.Campaigns.Where(s => s.Payments.Sum(p => p.Amount) >= s.Amount).Count(),
+                TotalAmountReceived = user.Campaigns.Sum(p => p.Payments.Where(p=> p.Status == PaymentStatus.Successful).Sum(pay => pay.Amount)),
+                TotalActiveCampaigns = user.Campaigns.Where(s => s.Payments.Where(p=> p.Status == PaymentStatus.Successful).Sum(p => p.Amount) < s.Amount).Count(),
+                TotalInactiveCampaigns = user.Campaigns.Where(s => s.Payments.Where(p=> p.Status == PaymentStatus.Successful).Sum(p => p.Amount) >= s.Amount).Count(),
             };
 
 

@@ -28,7 +28,6 @@ namespace fundit_server.DTOs
     public class GetUserStatsResponse{
         public decimal WalletBalance { get; set; }
         public decimal TotalAmountReceived { get; set; }
-        public decimal TotalAmountDonated { get; set; }
         public decimal TotalAmountWithdrawn { get; set; }
         public int TotalActiveCampaigns { get; set; }
         public int TotalInactiveCampaigns { get; set; }

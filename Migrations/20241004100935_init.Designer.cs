@@ -12,8 +12,8 @@ using fundit_server.Contexts;
 namespace fundit_server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241003182438_init3")]
-    partial class init3
+    [Migration("20241004100935_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -105,8 +105,19 @@ namespace fundit_server.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<string>("Reference")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -183,6 +194,10 @@ namespace fundit_server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AccountName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("AccountNo")
                         .IsRequired()
                         .HasColumnType("text");
@@ -225,7 +240,7 @@ namespace fundit_server.Migrations
             modelBuilder.Entity("fundit_server.Entities.Campaign", b =>
                 {
                     b.HasOne("fundit_server.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Campaigns")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -241,21 +256,17 @@ namespace fundit_server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("fundit_server.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("fundit_server.Entities.User", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Campaign");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("fundit_server.Entities.Withdrawal", b =>
                 {
                     b.HasOne("fundit_server.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Withdrawals")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -266,6 +277,15 @@ namespace fundit_server.Migrations
             modelBuilder.Entity("fundit_server.Entities.Campaign", b =>
                 {
                     b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("fundit_server.Entities.User", b =>
+                {
+                    b.Navigation("Campaigns");
+
+                    b.Navigation("Payments");
+
+                    b.Navigation("Withdrawals");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,6 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); }); ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Fund It", Version = "v1" });
@@ -48,8 +57,7 @@ builder.Services.AddSingleton(cloudinary);
 builder.Services.AddHttpClient();
 
 builder.Services
-    .AddDatabase(
-        "Server=dpg-crvcfftds78s73ackrng-a.oregon-postgres.render.com;Port=5432;Database=fundit;User Id=mazeedah;Password=n1JPJLOljm5tx46GWWj3Mh8FtoDmhlE1;")
+    .AddDatabase(builder.Configuration["ConnectionStrings:FundIt"])
     .AddRepositories()
     .AddServices()
     .AutoMapper()
@@ -86,6 +94,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

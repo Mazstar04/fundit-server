@@ -55,7 +55,7 @@ namespace fundit_server.Implementations.Services
 
         public async Task<PaginatedResult<GetCampaignResponse>> GetAllCampaigns(PaginationFilter paginationFilter)
         {
-            var query = _campaignRepo.Query();
+             var query = _campaignRepo.Query();
 
             // Apply search if SearchValue is provided
             if (!string.IsNullOrWhiteSpace(paginationFilter.SearchValue))
@@ -64,7 +64,7 @@ namespace fundit_server.Implementations.Services
                                       || c.ShortDescription.Contains(paginationFilter.SearchValue));
             }
             var totalCount = await query.CountAsync();
-            var trips = await query
+            var campaigns = await query
             .OrderByDescending(t => t.Created)
                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                .Take(paginationFilter.PageSize)
@@ -72,7 +72,7 @@ namespace fundit_server.Implementations.Services
                .Include(t => t.Payments)
                .ToListAsync();
 
-            var campaignResponse = _mapper.Map<List<GetCampaignResponse>>(trips);
+            var campaignResponse = _mapper.Map<List<GetCampaignResponse>>(campaigns);
 
             return new PaginatedResult<GetCampaignResponse>
             {
@@ -97,7 +97,7 @@ namespace fundit_server.Implementations.Services
                                       || c.ShortDescription.Contains(paginationFilter.SearchValue));
             }
             var totalCount = await query.CountAsync();
-            var trips = await query
+            var campaigns = await query
             .OrderByDescending(t => t.Created)
                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                .Take(paginationFilter.PageSize)
@@ -105,7 +105,7 @@ namespace fundit_server.Implementations.Services
                .Include(t => t.Payments)
                .ToListAsync();
 
-            var campaignResponse = _mapper.Map<List<GetCampaignResponse>>(trips);
+            var campaignResponse = _mapper.Map<List<GetCampaignResponse>>(campaigns);
 
             return new PaginatedResult<GetCampaignResponse>
             {
@@ -131,7 +131,7 @@ namespace fundit_server.Implementations.Services
                                       || c.ShortDescription.Contains(paginationFilter.SearchValue));
             }
             var totalCount = await query.CountAsync();
-            var trips = await query
+            var campaigns = await query
             .OrderByDescending(t => t.Created)
                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                .Take(paginationFilter.PageSize)
@@ -139,7 +139,7 @@ namespace fundit_server.Implementations.Services
                .Include(t => t.Payments)
                .ToListAsync();
 
-            var campaignResponse = _mapper.Map<List<GetCampaignResponse>>(trips);
+            var campaignResponse = _mapper.Map<List<GetCampaignResponse>>(campaigns);
 
             return new PaginatedResult<GetCampaignResponse>
             {

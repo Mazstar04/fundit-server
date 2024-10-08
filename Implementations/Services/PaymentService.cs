@@ -58,8 +58,8 @@ namespace fundit_server.Implementations.Services
             {
                 amount = request.Amount * 100, // Paystack expects amount in kobo (cents)
                 email = request.Email,
-                reference = reference, // Reference
-                callback_url = $"{_config["Paystack:CallbackUrl"]}" // Paystack will call this URL when payment is complete
+                reference = reference, 
+                callback_url = $"{_config["Paystack:CallbackUrl"]}" 
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(paymentRequest), Encoding.UTF8, "application/json");
@@ -114,6 +114,16 @@ namespace fundit_server.Implementations.Services
                     StatusCode = HttpStatusCode.NotFound,
                 };
             }
+             if (payment.Status == PaymentStatus.Successful)
+            {
+                return new BaseResponse
+                {
+                    Succeeded = true,
+                    Message = "Payment already verified",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+            
             if (paymentResult.status == "cancelled" || paymentResult.status == "failed")
             {
                 // Update the payment status to 'Cancelled'

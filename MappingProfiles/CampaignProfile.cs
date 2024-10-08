@@ -16,12 +16,12 @@ public class CampaignProfile : Profile
 
         CreateMap<Campaign, GetCampaignResponse>()
         .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.User.LastName} {src.User.FirstName}"))
-        .ForMember(dest => dest.ProfileImagePath, opt => opt.MapFrom(src => src.User.ProfileImagePath))
+          .ForMember(dest => dest.TotalPayment, opt => opt.MapFrom(src => src.Payments.Where(p=> p.Status == PaymentStatus.Successful).Count()))
         .ForMember(dest => dest.AmountRaised, opt => opt.MapFrom(src => src.Payments.Where(p=> p.Status == PaymentStatus.Successful).Sum(s=> s.Amount)));
         
         CreateMap<Campaign, GetCampaignDetailResponse>()
         .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.User.LastName} {src.User.FirstName}"))
-        .ForMember(dest => dest.ProfileImagePath, opt => opt.MapFrom(src => src.User.ProfileImagePath))
+        .ForMember(dest => dest.TotalPayment, opt => opt.MapFrom(src => src.Payments.Where(p=> p.Status == PaymentStatus.Successful).Count()))
         .ForMember(dest => dest.AmountRaised, opt => opt.MapFrom(src => src.Payments.Where(p=> p.Status == PaymentStatus.Successful).Sum(s=> s.Amount)));
         // Add other mappings as needed...
     }

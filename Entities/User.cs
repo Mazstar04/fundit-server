@@ -8,7 +8,7 @@ namespace fundit_server.Entities
         public string PhoneNumber { get; set; }
         public string? PasswordHash { get; set; }
         public string? HashSalt { get; set; }
-        public string ProfileImagePath { get; set; }
+        public string? ProfileImagePath { get; set; }
         public decimal WalletBalance { get; set; }
          public List<Campaign> Campaigns { get; set; }
          public List<Payment> Payments { get; set; }

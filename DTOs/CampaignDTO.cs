@@ -28,10 +28,11 @@ namespace fundit_server.DTOs
         public string ShortDescription { get; set; }
         public decimal Amount { get; set; }
         public decimal AmountRaised { get; set; }
-        public string CoverImagePath { get; set; }
+         public string CoverImagePath { get; set; }
+        public string[] ImagePaths { get; set; }
         public DateTime Created { get; set; }
         public string FullName { get; set; }
-        public string ProfileImagePath { get; set; }
+        public int TotalPayment { get; set; }
     }
     public class GetCampaignDetailResponse
     {
@@ -42,9 +43,9 @@ namespace fundit_server.DTOs
         public decimal Amount { get; set; }
         public decimal AmountRaised { get; set; }
         public string FullName { get; set; }
-        public string ProfileImagePath { get; set; }
         public DateTime Created { get; set; }
         public string CoverImagePath { get; set; }
         public string[] ImagePaths { get; set; }
+        public int TotalPayment { get; set; }
     }
 }

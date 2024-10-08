@@ -7,7 +7,6 @@ namespace fundit_server.DTOs
         [Required]
         [EmailAddress(ErrorMessage = "Provide a valid Email")]
         public string Email { get; set; }
-
         [Required]
         [Phone(ErrorMessage = "Provide a valid PhoneNumber")]
         public string PhoneNumber { get; set; }
@@ -20,8 +19,10 @@ namespace fundit_server.DTOs
          ErrorMessage = "Password must be at least six characters and include a number, a lowercase letter, an uppercase letter, and a special character.")]
         public string Password { get; set; }
         [Required]
+        [Compare("Password")]
+        public string ConfirmPassword { get; set; }        
         [Url]
-        public string ProfileImagePath { get; set; }
+        public string? ProfileImagePath { get; set; }
 
     }
 
@@ -32,5 +33,4 @@ namespace fundit_server.DTOs
         public int TotalActiveCampaigns { get; set; }
         public int TotalInactiveCampaigns { get; set; }
     }
-
 }

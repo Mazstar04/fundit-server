@@ -10,8 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); }); ;
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers().AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
 {
@@ -51,7 +50,6 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
-
 var cloudinary = new Cloudinary(new Account(builder.Configuration["Cloudinary:CloudName"], builder.Configuration["Cloudinary:ApiKey"], builder.Configuration["Cloudinary:ApiSecret"]));
 builder.Services.AddSingleton(cloudinary);
 builder.Services.AddHttpClient();
@@ -62,7 +60,6 @@ builder.Services
     .AddServices()
     .AutoMapper()
     .AddHttpContextAccessor();
-
 
 builder.Services.AddAuthentication(options =>
 {
@@ -84,22 +81,27 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Allow Swagger UI in all environments
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fund It v1"));
 
 app.UseCors();
-app.UseHttpsRedirection();
+
+// Use HTTPS redirection only in production
+if (app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Configure the application to listen on the port provided by Render
+app.Urls.Add($"http://+:{Environment.GetEnvironmentVariable("PORT") ?? "5000"}");
 
 app.Run();
